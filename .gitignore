@@ -1,0 +1,4 @@
+course_scraper/__pycache__
+course_scraper/spiders/__pycache__
+*.pyc
+data.csv

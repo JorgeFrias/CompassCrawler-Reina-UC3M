@@ -21,9 +21,10 @@ class SpiderCoursesSpider(CrawlSpider):
 
     def parse_item(self, response):
         print('Processing..' + response.url)
-        yield scrapy.Request(response.url, callback=self.parse_detail_page)
+        #self.parse_detail_page(response)
+        #yield scrapy.Request(response.url, callback=self.parse_detail_page)
 
-    def parse_detail_page(self, response):
+        #def parse_detail_page(self, response):
         year_selector = '//div [@class = "anio"]/text()'
         nameId_selector = '//div [@class = "asignatura"]/text()'
         bachelor_selector = '//div[@class="col-xs-8 col-lg-8 col-xl-8"]/center/text()'

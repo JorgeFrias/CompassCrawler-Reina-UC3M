@@ -20,6 +20,6 @@ class CourseScraperItem(scrapy.Item):
     departament = scrapy.Field()
     type = scrapy.Field()
     credits = scrapy.Field()
-    semester = scrapy.Field()
+    course = scrapy.Field()
     url = scrapy.Field()
 

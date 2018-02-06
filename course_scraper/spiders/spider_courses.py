@@ -41,8 +41,48 @@ class SpiderCoursesSpider(CrawlSpider):
         departament = response.xpath(departament_selector).extract()[1]
         type = response.xpath(typeAndSemester_slector).extract()[1]
         credits = response.xpath(credits_selector).extract()[7]
-        semester = response.xpath(typeAndSemester_slector).extract()[3]
-       #course Problema, no soy capaz de obtenerlo
+        course = response.xpath(typeAndSemester_slector).extract()[3]
+        #semestre Problema, no soy capaz de obtenerlo
+
+
+
+        ### VALUES CLEANING ###
+        # Year = course
+        year = year[8:]
+        # id
+        id = id[1:-1]
+        # course
+        if course[-1] == 'º':
+            course = course[:-1]
+        else:
+            print('unexpected course value')
+        #clean the Credits value
+        ectsPos = credits.find('ECTS')
+        credits = credits[:ectsPos]
+        credits = credits.strip()
+
+        # clean \n
+        year = year.replace('\n','')
+        name = name.replace('\n','')
+        id = id.replace('\n','')
+        bachelor = bachelor.replace('\n','')
+        coordinator = coordinator.replace('\n','')
+        departament = departament.replace('\n','')
+        type = type.replace('\n','')
+        credits = credits.replace('\n','')
+        course = course.replace('\n','')
+
+        # clean \t
+        year = year.replace('\t','')
+        name = name.replace('\t','')
+        id = id.replace('\t','')
+        bachelor = bachelor.replace('\t','')
+        coordinator = coordinator.replace('\t','')
+        departament = departament.replace('\t','')
+        type = type.replace('\t','')
+        credits = credits.replace('\t','')
+        course = course.replace('\t','')
+
 
         item = CourseScraperItem()
 
@@ -54,7 +94,7 @@ class SpiderCoursesSpider(CrawlSpider):
         item['departament'] = departament
         item['type'] = type
         item['credits'] = credits
-        item['semester'] = semester
+        item['course'] = course
         item['url'] = response.url
 
         yield item

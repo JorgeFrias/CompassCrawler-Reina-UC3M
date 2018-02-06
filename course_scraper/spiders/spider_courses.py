@@ -30,8 +30,9 @@ class SpiderCoursesSpider(CrawlSpider):
         bachelor_selector = '//div[@class="col-xs-8 col-lg-8 col-xl-8"]/center/text()'
         coordinator_selector = '//div[@class="col-xs-10 col-lg-10 col-xl-10"]/text()'
         departament_selector = '//div[@class="col-xs-12 col-lg-12 col-xl-12"]/text()'
-        typeAndSemester_slector = '//div[@class="container-fluid"]/div[@class="row"]/div[1]/text()'
+        typeAndCourse_slector = '//div[@class="container-fluid"]/div[@class="row"]/div[1]/text()'
         credits_selector = '//div[@class="container-fluid"]/div[@class="row"]/div[2]/text()'
+        semester_selector = '//div[@class="container-fluid"]/div[@class="row"]/div[2]/text()'
 
         year = response.xpath(year_selector).extract_first()
         name = response.xpath(nameId_selector).extract()[0]
@@ -39,24 +40,32 @@ class SpiderCoursesSpider(CrawlSpider):
         bachelor = response.xpath(bachelor_selector).extract()[1]
         coordinator = response.xpath(coordinator_selector).extract()[1]
         departament = response.xpath(departament_selector).extract()[1]
-        type = response.xpath(typeAndSemester_slector).extract()[1]
+        type = response.xpath(typeAndCourse_slector).extract()[1]
         credits = response.xpath(credits_selector).extract()[7]
-        course = response.xpath(typeAndSemester_slector).extract()[3]
+        course = response.xpath(typeAndCourse_slector).extract()[3]
+        semester = response.xpath(semester_selector).extract()[-1]
         #semestre Problema, no soy capaz de obtenerlo
-
-
 
         ### VALUES CLEANING ###
         # Year = course
         year = year[8:]
+
         # id
         id = id[1:-1]
+
         # course
         if course[-1] == 'º':
             course = course[:-1]
         else:
             print('unexpected course value')
-        #clean the Credits value
+
+        # semester
+        if semester[-1] == 'º':
+            semester = semester[:-1]
+        else:
+            print('unexpected semester value')
+
+        # clean the Credits value
         ectsPos = credits.find('ECTS')
         credits = credits[:ectsPos]
         credits = credits.strip()
@@ -71,6 +80,7 @@ class SpiderCoursesSpider(CrawlSpider):
         type = type.replace('\n','')
         credits = credits.replace('\n','')
         course = course.replace('\n','')
+        semester = semester.replace('\n','')
 
         # clean \t
         year = year.replace('\t','')
@@ -82,6 +92,13 @@ class SpiderCoursesSpider(CrawlSpider):
         type = type.replace('\t','')
         credits = credits.replace('\t','')
         course = course.replace('\t','')
+        semester = semester.replace('\t','')
+
+        # clean ' '
+        credits = credits.replace(' ','')
+        course = course.replace(' ','')
+        semester = semester.replace(' ','')
+        id = id.replace(' ','')
 
 
         item = CourseScraperItem()
@@ -95,6 +112,7 @@ class SpiderCoursesSpider(CrawlSpider):
         item['type'] = type
         item['credits'] = credits
         item['course'] = course
+        item['semester'] = semester
         item['url'] = response.url
 
         yield item

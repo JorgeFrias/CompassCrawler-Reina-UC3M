@@ -18,7 +18,7 @@ class CoursesSpider(CrawlSpider):
     def parse_courses(self, response):
         course_links = response.css('.large > .detailsLink::attr(href)').extract()
         for a in course_links:
-            yield scrapy.Request(a, callback=self.parse_detail_page)
+            yield scrapy.Request(a, callback=self.parse_item)
 
 
     def parse_item(self, response):

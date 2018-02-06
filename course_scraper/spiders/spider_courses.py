@@ -6,13 +6,22 @@ from course_scraper.items import CourseScraperItem
 
 class SpiderCoursesSpider(CrawlSpider):
     name = 'spider_courses'
+
+    # Limit the domains, just the course specifications
     allowed_domains = [
         'www3.uc3m.es',
         'uc3m.es/ss',
         'uc3m.es/reina',
         'aplicaciones.uc3m.es']
 
-    start_urls = ['https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212562160/1371212987094/Bachelor_s_Degree_in_Computer_Science_and_Engineering#curriculum']
+    # Bachelor's main pages:
+    start_urls = [
+        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212562160/1371212987094/Bachelor_s_Degree_in_Computer_Science_and_Engineering#curriculum',
+        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212560793/1371212987094/Bachelor_s_Degree_in_Telematics_Engineering',
+        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212345976/1371212987094/Bachelor_s_Degree_in_Telecommunication_Technologies_Engineering',
+        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212485394/1371212987094/Bachelor_s_Degree_in_Communication_System_Engineering',
+        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212533644/1371212987094/Bachelor_s_Degree_in_Audiovisual_System_Engineering'
+                  ]
 
     rules = (
         Rule(LinkExtractor(allow=(), restrict_css=('[data-label="Subject"]',)),
@@ -25,6 +34,7 @@ class SpiderCoursesSpider(CrawlSpider):
         #yield scrapy.Request(response.url, callback=self.parse_detail_page)
 
         #def parse_detail_page(self, response):
+        # XPATH to extract desired information
         year_selector = '//div [@class = "anio"]/text()'
         nameId_selector = '//div [@class = "asignatura"]/text()'
         bachelor_selector = '//div[@class="col-xs-8 col-lg-8 col-xl-8"]/center/text()'

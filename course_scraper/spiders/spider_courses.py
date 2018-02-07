@@ -3,6 +3,7 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from course_scraper.items import CourseScraperItem
+from course_scraper.Utils import TextUtil
 
 class SpiderCoursesSpider(CrawlSpider):
     name = 'spider_courses'
@@ -43,6 +44,8 @@ class SpiderCoursesSpider(CrawlSpider):
         typeAndCourse_slector = '//div[@class="container-fluid"]/div[@class="row"]/div[1]/text()'
         credits_selector = '//div[@class="container-fluid"]/div[@class="row"]/div[2]/text()'
         semester_selector = '//div[@class="container-fluid"]/div[@class="row"]/div[2]/text()'
+        furtherInfo_selector = '//div[@class="panel panel-primary apartado"]/div[2]/textarea/text()'         # Used by prerequisite, qualification & programe
+
 
         year = response.xpath(year_selector).extract_first()
         name = response.xpath(nameId_selector).extract()[0]
@@ -54,62 +57,39 @@ class SpiderCoursesSpider(CrawlSpider):
         credits = response.xpath(credits_selector).extract()[7]
         course = response.xpath(typeAndCourse_slector).extract()[3]
         semester = response.xpath(semester_selector).extract()[-1]
+        prerequisite = response.xpath(furtherInfo_selector).extract()[0]
+        qualification = response.xpath(furtherInfo_selector).extract()[1]
+        programme = response.xpath(furtherInfo_selector).extract()[2]
+
         #semestre Problema, no soy capaz de obtenerlo
 
         ### VALUES CLEANING ###
-        # Year = course
-        year = year[8:]
 
-        # id
-        id = id[1:-1]
+        # Numbers cleaning
+        #year = year[8:]                                     # Year
+        tmpYearList = TextUtil.extractNumericValue(id)
+        year = str(int(tmpYearList[0])) + '/' + str(int(tmpYearList[1]))
+        id = int(TextUtil.extractNumericValue(id)[0])       # Id
+        course = int(TextUtil.extractNumericValue(course)[0])
+        semester = int(TextUtil.extractNumericValue(semester)[0])
+        credits = TextUtil.extractNumericValue(credits)[0]
 
-        # course
-        if course[-1] == 'º':
-            course = course[:-1]
-        else:
-            print('unexpected course value')
+        # Clean \n & \t
+        name = TextUtil.cleanProcedure_SingleLineText(name)
+        bachelor = TextUtil.cleanProcedure_SingleLineText(bachelor)
+        coordinator = TextUtil.cleanProcedure_SingleLineText(coordinator)
+        departament = TextUtil.cleanProcedure_SingleLineText(departament)
+        type = TextUtil.cleanProcedure_SingleLineText(type)
+        #year = TextUtil.cleanProcedure_SingleLineText(year)
+        #id = TextUtil.cleanProcedure_SingleLineText(id)
+        #course = TextUtil.cleanProcedure_SingleLineText(course)
+        #semester = TextUtil.cleanProcedure_SingleLineText(semester)
+        #credits = TextUtil.cleanProcedure_SingleLineText(credits)
 
-        # semester
-        if semester[-1] == 'º':
-            semester = semester[:-1]
-        else:
-            print('unexpected semester value')
-
-        # clean the Credits value
-        ectsPos = credits.find('ECTS')
-        credits = credits[:ectsPos]
-        credits = credits.strip()
-
-        # clean \n
-        year = year.replace('\n','')
-        name = name.replace('\n','')
-        id = id.replace('\n','')
-        bachelor = bachelor.replace('\n','')
-        coordinator = coordinator.replace('\n','')
-        departament = departament.replace('\n','')
-        type = type.replace('\n','')
-        credits = credits.replace('\n','')
-        course = course.replace('\n','')
-        semester = semester.replace('\n','')
-
-        # clean \t
-        year = year.replace('\t','')
-        name = name.replace('\t','')
-        id = id.replace('\t','')
-        bachelor = bachelor.replace('\t','')
-        coordinator = coordinator.replace('\t','')
-        departament = departament.replace('\t','')
-        type = type.replace('\t','')
-        credits = credits.replace('\t','')
-        course = course.replace('\t','')
-        semester = semester.replace('\t','')
-
-        # clean ' '
-        credits = credits.replace(' ','')
-        course = course.replace(' ','')
-        semester = semester.replace(' ','')
-        id = id.replace(' ','')
-
+        # Clean paragraphs
+        prerequisite = TextUtil.cleanProcedure_Paragraphs(prerequisite)
+        qualification = TextUtil.cleanProcedure_Paragraphs(qualification)
+        programme = TextUtil.cleanProcedure_Paragraphs(programme)
 
         item = CourseScraperItem()
 
@@ -124,5 +104,8 @@ class SpiderCoursesSpider(CrawlSpider):
         item['course'] = course
         item['semester'] = semester
         item['url'] = response.url
+        item['prerequisite'] = prerequisite
+        item['qualification'] = qualification
+        item['programme'] = programme
 
         yield item

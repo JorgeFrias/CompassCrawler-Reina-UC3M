@@ -4,6 +4,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from course_scraper.items import CourseScraperItem
 from course_scraper.Utils import TextUtil
+from operator import xor
 
 class SpiderCoursesSpider(CrawlSpider):
     name = 'spider_courses'
@@ -67,12 +68,25 @@ class SpiderCoursesSpider(CrawlSpider):
 
         # Numbers cleaning
         #year = year[8:]                                     # Year
-        tmpYearList = TextUtil.extractNumericValue(id)
+        tmpYearList = TextUtil.extractNumericValue(year)
         year = str(int(tmpYearList[0])) + '/' + str(int(tmpYearList[1]))
-        id = int(TextUtil.extractNumericValue(id)[0])       # Id
-        course = int(TextUtil.extractNumericValue(course)[0])
-        semester = int(TextUtil.extractNumericValue(semester)[0])
+        id = int(TextUtil.extractNumericValue(id)[0])
         credits = TextUtil.extractNumericValue(credits)[0]
+
+        # Some information is usually missing in course and semester
+        try:
+            course = int(TextUtil.extractNumericValue(course)[0])
+        except:
+            print('Course definition error, defined as: \'' + course + '\'')
+            course = 'NA'
+            pass
+
+        try:
+            semester = int(TextUtil.extractNumericValue(semester)[0])
+        except:
+            print('Semester definition error, defined as: \' ' + semester + '\'')
+            semester = 'NA'
+            pass
 
         # Clean \n & \t
         name = TextUtil.cleanProcedure_SingleLineText(name)
@@ -87,9 +101,23 @@ class SpiderCoursesSpider(CrawlSpider):
         #credits = TextUtil.cleanProcedure_SingleLineText(credits)
 
         # Clean paragraphs
-        prerequisite = TextUtil.cleanProcedure_Paragraphs(prerequisite)
-        qualification = TextUtil.cleanProcedure_Paragraphs(qualification)
-        programme = TextUtil.cleanProcedure_Paragraphs(programme)
+        try:
+            prerequisite = TextUtil.cleanProcedure_Paragraphs(prerequisite)
+        except:
+            prerequisite = ''
+            pass
+
+        try:
+            qualification = TextUtil.cleanProcedure_Paragraphs(qualification)
+        except:
+            qualification = ''
+            pass
+
+        try:
+            programme = TextUtil.cleanProcedure_Paragraphs(programme)
+        except:
+            programme = ''
+            pass
 
         item = CourseScraperItem()
 

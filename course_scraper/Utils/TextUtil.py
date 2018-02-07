@@ -39,7 +39,7 @@ Extracts all the numeric value from a given string.
 def extractNumericValue(stringToExtract):
     #return int(filter(str.isdigit, stringToExtract))
     l = []
-    for t in re.split(';|,|\*|\n|\s|\(|\)' ,stringToExtract):
+    for t in re.split(';|,|\*|\n|\s|\(|\)|/|º|ª' ,stringToExtract):
         try:
             l.append(float(t))
         except ValueError:

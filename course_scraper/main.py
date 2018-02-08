@@ -16,4 +16,7 @@ if sys.argv[1] == 'b':
     print('CSV export')
     command = ("scrapy crawl --nolog spider_courses -o data.csv -t csv")
 
+if sys.argv[1] == 'c':
+    print('JSON export')
+
 cmdline.execute(command.split())

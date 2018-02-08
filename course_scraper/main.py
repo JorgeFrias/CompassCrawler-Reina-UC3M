@@ -1,3 +1,8 @@
+# COMPASS project
+# Courses Information Crawler for UC3M web page.
+# Author: Jorge Frias Galan
+# Feb/2018
+
 from scrapy import cmdline
 import sys
 

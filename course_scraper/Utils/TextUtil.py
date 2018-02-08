@@ -1,3 +1,8 @@
+# COMPASS project
+# Courses Information Crawler for UC3M web page.
+# Author: Jorge Frias Galan
+# Feb/2018
+
 # In the pythonic way, static methods are declared outside a class.
 # "Pascal heart crying"
 import re
@@ -37,7 +42,6 @@ def cleanWitheSpaces(stringToClean):
 Extracts all the numeric value from a given string.
 """
 def extractNumericValue(stringToExtract):
-    #return int(filter(str.isdigit, stringToExtract))
     l = []
     for t in re.split(';|,|\*|\n|\s|\(|\)|/|º|ª' ,stringToExtract):
         try:
@@ -57,7 +61,6 @@ def cleanHTML(raw_html):
 
 ### CLEANING PROCEDURES ###
 # Usually used functions to apply over text
-
 """
 Cleans:
 - Tabs
@@ -70,6 +73,11 @@ def cleanProcedure_Paragraphs(stringToClean):
     stringToClean = cleanLastNewLine(stringToClean)
     return stringToClean
 
+'''
+Cleans:
+- Tabs
+- All new lines
+'''
 def cleanProcedure_SingleLineText(stringToClean):
     stringToClean = cleanTabs(stringToClean)
     stringToClean = cleanNewLines(stringToClean)

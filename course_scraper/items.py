@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# COMPASS project
+# Courses Information Crawler for UC3M web page.
+# Author: Jorge Frias Galan
+# Feb/2018
 
 # Define here the models for your scraped items
 #
@@ -6,7 +10,6 @@
 # https://doc.scrapy.org/en/latest/topics/items.html
 
 import scrapy
-
 
 class CourseScraperItem(scrapy.Item):
     # define the fields for your item here like:

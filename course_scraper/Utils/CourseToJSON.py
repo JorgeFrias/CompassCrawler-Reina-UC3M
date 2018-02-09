@@ -90,7 +90,7 @@ class CourseToJSONC(object):
         try:
             print('Writing json')
             fileName = fileName + '.json'
-            with open(fileName + '.json', 'w') as outfile:
+            with open(fileName, 'w') as outfile:
                  json.dump(data, outfile, indent=1)
             # outfile = open(fileName, 'w')
             # json.dump(data, outfile)

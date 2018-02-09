@@ -5,7 +5,7 @@
 
 from course_scraper import items
 import json
-
+import os.path
 
 class CourseToJSONC(object):
     '''
@@ -38,7 +38,9 @@ class CourseToJSONC(object):
 
     def createJSON(self, item: items.CourseScraperItem):
         data = self.genDicts(item)
-        fileName = 'Courses/' + str(item.bachelor) + str(item.id)
+        cwd = os.getcwd()               # Current working directory
+        fileName = str(item['bachelor']) + '_' + str(item['id'])
+        fileName = os.path.join(cwd, 'Courses', fileName)
         self.saveJSON(data, fileName)
 
     def genCompassDict(self, key, value, language):
@@ -84,11 +86,14 @@ class CourseToJSONC(object):
 
         return data
 
-    def saveJSON(self, data, filName):
+    def saveJSON(self, data, fileName):
         try:
             print('Writing json')
-            with open(filName + '.json', 'a') as outfile:
-                json.dump(data, outfile)
+            fileName = fileName + '.json'
+            with open(fileName + '.json', 'w') as outfile:
+                 json.dump(data, outfile, indent=1)
+            # outfile = open(fileName, 'w')
+            # json.dump(data, outfile)
 
         except:
             print('Error writing to file')

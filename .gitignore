@@ -4,3 +4,6 @@ course_scraper/spiders/__pycache__
 data.csv
 data.xlsx
 ~$data.xlsx
+.idea/CompassCrawler.iml
+.idea/
+course_scraper/Courses/

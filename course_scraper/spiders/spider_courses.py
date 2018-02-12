@@ -2,6 +2,7 @@
 # COMPASS project
 # Courses Information Crawler for UC3M web page.
 # Author: Jorge Frias Galan
+# jofriasg@pa.uc3m.es
 # Feb/2018
 
 import scrapy

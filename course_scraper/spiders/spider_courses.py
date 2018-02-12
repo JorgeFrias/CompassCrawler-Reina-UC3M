@@ -22,6 +22,12 @@ Last update: feb/2018
 class SpiderCoursesSpider(CrawlSpider):
     name = 'spider_courses'
 
+    # Code to set the start URL
+    def __init__(self, *args, **kwargs):
+        super(SpiderCoursesSpider, self).__init__(*args, **kwargs)
+        self.start_urls = [kwargs.get('start_url')]
+        a = 2
+
     # Limit the domains, just the course specifications allowed
     allowed_domains = [
         'www3.uc3m.es',
@@ -29,14 +35,15 @@ class SpiderCoursesSpider(CrawlSpider):
         'uc3m.es/reina',
         'aplicaciones.uc3m.es']
 
+    # No need for define the pages here, will be set by the user
     # Bachelor's main pages:
-    start_urls = [
-        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212562160/1371212987094/Bachelor_s_Degree_in_Computer_Science_and_Engineering#curriculum',
-        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212560793/1371212987094/Bachelor_s_Degree_in_Telematics_Engineering',
-        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212345976/1371212987094/Bachelor_s_Degree_in_Telecommunication_Technologies_Engineering',
-        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212485394/1371212987094/Bachelor_s_Degree_in_Communication_System_Engineering',
-        'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212533644/1371212987094/Bachelor_s_Degree_in_Audiovisual_System_Engineering'
-                  ]
+    # start_urls = [
+    #     'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212562160/1371212987094/Bachelor_s_Degree_in_Computer_Science_and_Engineering#curriculum',
+    #     'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212560793/1371212987094/Bachelor_s_Degree_in_Telematics_Engineering',
+    #     'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212345976/1371212987094/Bachelor_s_Degree_in_Telecommunication_Technologies_Engineering',
+    #     'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212485394/1371212987094/Bachelor_s_Degree_in_Communication_System_Engineering',
+    #     'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212533644/1371212987094/Bachelor_s_Degree_in_Audiovisual_System_Engineering'
+    #               ]
 
     # For each extracted link in allowed domains (just course information) call parse item
     rules = (

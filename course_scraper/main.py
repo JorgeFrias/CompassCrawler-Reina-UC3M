@@ -5,19 +5,22 @@
 
 from scrapy import cmdline
 import sys
+import subprocess
 
-command = ("scrapy crawl --nolog spider_courses")
+print('Welcome to COMPASS UC3M courses parser. '
+      '\n This tool helps you to extract the information from the UC3M website '
+      'and export it to COMPASS JSON format. \n')
+print('Homepages of the bachelors you want the information, divided by a new line: \n')
 
-if sys.argv[1] == 'a':
-    print('Not exporting')
-    command = ("scrapy crawl --nolog spider_courses")
-    command = ("scrapy crawl spider_courses")
+pagesList = []
+while True:
+    line = input()
+    if line:
+        pagesList.append(line)
+    else:
+        break
 
-if sys.argv[1] == 'b':
-    print('CSV export')
-    command = ("scrapy crawl --nolog spider_courses -o data.csv -t csv")
+for page in pagesList:
+    command = ('scrapy crawl spider_courses -a start_url=' + page)
+    ls_output = subprocess.check_output(command.split())
 
-if sys.argv[1] == 'c':
-    print('JSON export')
-
-cmdline.execute(command.split())

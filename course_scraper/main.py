@@ -9,26 +9,32 @@ import sys
 import os
 import subprocess
 
-print('Welcome to COMPASS UC3M courses parser.\n'
-      'This tool helps you to extract the information from the UC3M website '
-      'and export it to COMPASS JSON format.\n')
-print('Homepages of the bachelors you want the information, divided by a new line: \n')
-
-pagesList = []
-while True:
-    line = input()
-    if line:
-        pagesList.append(line)
-    else:
-        break
-
-for page in pagesList:
-    print('Extracting: ' + page)
+if (sys.argv[1] is 'd'):
+    page = 'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212562160/1371212987094/Bachelor_s_Degree_in_Computer_Science_and_Engineering#curriculum'
     command = ('scrapy crawl --nolog spider_courses -a start_url=' + page)
-    ls_output = subprocess.check_output(command.split())
+    cmdline.execute(command.split())
+else:
+    print('Welcome to COMPASS UC3M courses parser.\n'
+          'This tool helps you to extract the information from the UC3M website '
+          'and export it to COMPASS JSON format.\n')
+    print('Homepages of the bachelors you want the information, divided by a new line: \n')
 
-print('\nInformation extracted')
+    pagesList = []
+    while True:
+        line = input()
+        if line:
+            pagesList.append(line)
+        else:
+            break
 
-cwd = os.getcwd()  # Current working directory
-filesPath = os.path.join(cwd, 'Courses')
-print('Stored at: ' + filesPath)
+    # For each page run a different crawler instance
+    for page in pagesList:
+        print('Extracting: ' + page)
+        command = ('scrapy crawl --nolog spider_courses -a start_url=' + page)
+        ls_output = subprocess.check_output(command.split())
+
+    print('\nInformation extracted')
+
+    cwd = os.getcwd()  # Current working directory
+    filesPath = os.path.join(cwd, 'Courses')
+    print('Stored at: ' + filesPath)

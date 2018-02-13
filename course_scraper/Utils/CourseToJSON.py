@@ -60,25 +60,73 @@ class CourseToJSONC(object):
 #        a = self.genCompassDict('dc.title',  item['name'], 'en_US')
 #        data['metadata'].append(a)
 
+        ### MANDATORY FIELDS --------------------------- ###
+        # TITLE
+        # A name given to the learning opportunity.
         data['metadata'].append(self.genCompassDict('dc.title', item['name'], 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.identifier', item['id'], 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.type', item['type'], 'en_US'))
+
+        # DESCRIPTION
+        # $$$$ Not defined at UC3M
         data['metadata'].append(self.genCompassDict('dc.description', item['qualification'], 'en_US'))
+
+        # IDENTIFIER
+        # An alternative unambiguous reference to the learning opportunity within a given context.
+        # Note: the primary identifier is automatically assigned by the system.
+        data['metadata'].append(self.genCompassDict('dc.identifier', item['id'], 'en_US'))
+
+        # PUBLISHER
+        # An entity responsible for making the description of the learning opportunity available.
+        data['metadata'].append(self.genCompassDict('dc.publisher', 'UC3M', 'en_US'))
+
+        # CREATOR
+        # An entity primarily responsible for creating the learning opportunity.
+        data['metadata'].append(self.genCompassDict('dc.creator', item['coordinator'], 'en_US'))
+
+        ### OPTIONAL FIELDS --------------------------- ###
+        # COMPETENCE
+        # A prerequisite competence for accessing learning opportunities.
+        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.competence', item['prerequisite'], 'en_US'))
+
+        # TYPE
+        # The nature or genre of the learning opportunity.
+        # Not the same type as UC3M, those are not considered in COMPASS (Compulsive, basic core...)
+        # It's hardwired to Talk/Lecture + Class/Group based, as all courses in the UC3M are (Bolonia)
+        data['metadata'].append(self.genCompassDict('dc.type', 'Talk/Lecture', 'en_US'))
+        data['metadata'].append(self.genCompassDict('dc.type', 'Class/Group based', 'en_US'))
+
+        # LEVEL
+        # An account of the education level of the learning opportunity.
+        # The bachelor information contains the kind of degree
+        if ( 'bachelor' in item['bachelor'].lower()):
+            data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', 'Bachelor', 'en_US'))
+        elif ( 'master' in item['bachelor'].lower()):
+            data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', 'Master', 'en_US'))
+
+        # URL
+        # A hyperlink to a web resource that provides an alternate representation of the learning opportunity.
+        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.url', item['url'], 'en_US'))
+
+        # SUBJECT
+        # The topic of the learning opportunity.
+        # Typically, the subject will be represented using keywords, key phrases, or classification codes.
+        # Recommended best practice is to use a controlled vocabulary.
+        # $$$$ Not trivial conversion
+        # data['metadata'].append(self.genCompassDict('dc.subject', item['name'], 'en_US'))
+
+
+
         # data['metadata'].append(self.genCompassDict('dc.rights', item., 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.subject', item['name'], 'en_US'))
         data['metadata'].append(self.genCompassDict('dc.date', item['semester'], 'en_US'))
         data['metadata'].append(self.genCompassDict('dc.language.iso', 'en_US', 'en_US'))
         data['metadata'].append(self.genCompassDict('dc.publisher', 'UC3M', 'en_US'))
         # data.append(self.genCompassDict('dc.relation', item., 'en_US'))
         data['metadata'].append(self.genCompassDict('dc.creator', item['bachelor'], 'en_US'))
-        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.url', item['url'], 'en_US'))
         data['metadata'].append(
             self.genCompassDict('compass.learningOpportunitySpecification.credit', item['credits'], 'en_US'))
         data['metadata'].append(
             self.genCompassDict('compass.learningOpportunitySpecification.qualification', item['qualification'], 'en_US'))
         data['metadata'].append(
             self.genCompassDict('compass.learningOpportunitySpecification.prerequisite', item['prerequisite'], 'en_US'))
-        # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.competence', item., 'en_US'))
         data['metadata'].append(
             self.genCompassDict('compass.learningOpportunitySpecification.objective', item['programme'], 'en_US'))
         # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', item., 'en_US'))

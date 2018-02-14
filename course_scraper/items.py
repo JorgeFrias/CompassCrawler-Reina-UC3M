@@ -26,8 +26,7 @@ class CourseScraperItem(scrapy.Item):
     course = scrapy.Field()
     semester = scrapy.Field()
     url = scrapy.Field()
-
     prerequisite = scrapy.Field()
     qualification = scrapy.Field()
     programme = scrapy.Field()
-
+    assessment = scrapy.Field()

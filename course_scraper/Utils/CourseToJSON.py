@@ -113,6 +113,17 @@ class CourseToJSONC(object):
         # Hard wired to English
         data['metadata'].append(self.genCompassDict('dc.language.iso', language, language))
 
+        # CREDITS
+        # An account of the credits that can be obtained from completion of a learning opportunity
+        # not use vocabulary. The values are like 5 ECTS or 10 OTHER. That filed consists of the credit value and credit schema.
+        # As credit schema we use only the ECTS.
+        tempCredits = str(item['credits']) + ' ECTS'
+        data['metadata'].append(
+            self.genCompassDict('compass.learningOpportunitySpecification.credit', tempCredits, language))
+
+        # ASSESSMENT
+        # A description of the broad approach to assessment strategy used in the learning opportunity.
+        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.assessment', item['assessment'], language))
 
         # SUBJECT
         # The topic of the learning opportunity.
@@ -121,23 +132,7 @@ class CourseToJSONC(object):
         # $$$$ Not trivial conversion
         # data['metadata'].append(self.genCompassDict('dc.subject', item['name'], 'en_US'))
 
-
-        # data['metadata'].append(self.genCompassDict('dc.rights', item., 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.date', item['semester'], language))
-        data['metadata'].append(self.genCompassDict('dc.publisher', 'UC3M', language))
-        # data.append(self.genCompassDict('dc.relation', item., 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.creator', item['bachelor'], language))
-        data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.credit', item['credits'], language))
-        data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.qualification', item['qualification'], language))
-        data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.prerequisite', item['prerequisite'], language))
-        data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.objective', item['programme'], language))
-        # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', item., 'en_US'))
-        # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.assessment', item., 'en_US'))
-        # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.hasPart', item., 'en_US'))
+        # More fields needed
 
         return data
 

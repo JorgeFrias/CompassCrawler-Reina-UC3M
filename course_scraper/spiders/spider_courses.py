@@ -67,7 +67,9 @@ class SpiderCoursesSpider(CrawlSpider):
         typeAndCourse_slector = '//div[@class="container-fluid"]/div[@class="row"]/div[1]/text()'
         credits_selector = '//div[@class="container-fluid"]/div[@class="row"]/div[2]/text()'
         semester_selector = '//div[@class="container-fluid"]/div[@class="row"]/div[2]/text()'
-        furtherInfo_selector = '//div[@class="panel panel-primary apartado"]/div[2]/textarea/text()'         # Used by prerequisite, qualification & programe
+        furtherInfo_selector = '//div[@class="panel panel-primary apartado"]/div[2]/textarea/text()'         # Used by prerequisite, qualification, programe & assesment
+        assessmentExt_selector = '///div[@class="panel panel-primary apartado"]/div[2]/ul/li/text()'
+
         # Extract the information given by XPATHs
         year = response.xpath(year_selector).extract_first()
         name = response.xpath(nameId_selector).extract()[0]
@@ -82,7 +84,11 @@ class SpiderCoursesSpider(CrawlSpider):
         prerequisite = response.xpath(furtherInfo_selector).extract()[0]
         qualification = response.xpath(furtherInfo_selector).extract()[1]
         programme = response.xpath(furtherInfo_selector).extract()[2]
-
+        # Assessment is divided, so we have to put it together
+        assessment = response.xpath(furtherInfo_selector).extract()[4]
+        assessmentExt = 'Last chance evaluation: \n' + \
+                        response.xpath(assessmentExt_selector).extract()[0] + '\n' + \
+                        response.xpath(assessmentExt_selector).extract()[1]
 
         ### VALUES CLEANING ###
         # Numbers cleaning
@@ -139,6 +145,20 @@ class SpiderCoursesSpider(CrawlSpider):
             programme = noInfoString
             pass
 
+        try:
+            assessment = TextUtil.cleanProcedure_Paragraphs(assessment)
+        except:
+            assessment = noInfoString
+            pass
+
+        try:
+            assessmentExt = TextUtil.cleanProcedure_Paragraphs(assessmentExt)
+        except:
+            assessmentExt = noInfoString
+            pass
+
+        assessment = assessment + '\n\n' + assessmentExt
+
         # Information to the Object
         courseObj = CourseScraperItem()
 
@@ -156,5 +176,6 @@ class SpiderCoursesSpider(CrawlSpider):
         courseObj['prerequisite'] = prerequisite
         courseObj['qualification'] = qualification
         courseObj['programme'] = programme
+        courseObj['assessment'] = assessment
 
         yield courseObj

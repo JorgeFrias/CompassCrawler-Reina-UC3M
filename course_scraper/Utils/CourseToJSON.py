@@ -11,33 +11,6 @@ from langdetect import detect
 
 
 class CourseToJSONC(object):
-    '''
-    {"metadata":[
-    {"key":"dc.title","value":"Test_title","language":"en_US"},
-    {"key":"dc.identifier","value":"test_identifier","language":"en_US"},
-    {"key":"dc.type","value":"test_type","language":"en_US"},
-    {"key":"dc.description","value":"test_description","language":"en_US"},
-    {"key":"dc.rights","value":"test_rights","language":"en_US"},
-    {"key":"dc.subject","value":"test_subject","language":"en_US"},
-    {"key":"dc.date","value":"test_date","language":null},
-    {"key":"dc.language.iso","value":"test_language","language":"en_US"},
-    {"key":"dc.publisher","value":"test_publisher","language":"en_US"},
-    {"key":"dc.relation","value":"test_relation","language":"en_US"},
-    {"key":"dc.creator","value":"test_creator","language":null},
-    {"key":"compass.learningOpportunitySpecification.url","value":"test_url","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.credit","value":"test_credit","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.qualification","value":"test_qualification","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.prerequisite","value":"test_prerequisite","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.competence","value":"test_competence","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.objective","value":"test_objective","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.level","value":"test_level","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.assessment","value":"test_assessment","language":"en_US"},
-    {"key":"compass.learningOpportunitySpecification.hasPart","value":"test_hasPart","language":"en_US"}
-    ]
-    }
-    '''
-
-    # Dictionaries in compass information model
 
     def createJSON(self, item: items.CourseScraperItem):
         data = self.genDicts(item)

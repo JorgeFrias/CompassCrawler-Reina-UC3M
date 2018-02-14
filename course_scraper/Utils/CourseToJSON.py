@@ -60,12 +60,12 @@ class CourseToJSONC(object):
         data['metadata'] = []
 
         # Language detection [RFC4646] [ISO 639-1]
-        lang = detect(item['name'])
+        language = detect(item['qualification'])
 
         ### MANDATORY FIELDS --------------------------- ###
         # TITLE
         # A name given to the learning opportunity.
-        data['metadata'].append(self.genCompassDict('dc.title', item['name'], lang))
+        data['metadata'].append(self.genCompassDict('dc.title', item['name'], language))
 
         # DESCRIPTION
         # $$$$ Not defined at UC3M
@@ -74,44 +74,44 @@ class CourseToJSONC(object):
         # IDENTIFIER
         # An alternative unambiguous reference to the learning opportunity within a given context.
         # Note: the primary identifier is automatically assigned by the system.
-        data['metadata'].append(self.genCompassDict('dc.identifier', item['id'], lang))
+        data['metadata'].append(self.genCompassDict('dc.identifier', self.idGenerate('UC3M',item['id'], item['bachelor']), language))
 
         # PUBLISHER
         # An entity responsible for making the description of the learning opportunity available.
-        data['metadata'].append(self.genCompassDict('dc.publisher', 'UC3M', lang))
+        data['metadata'].append(self.genCompassDict('dc.publisher', 'UC3M', language))
 
         # CREATOR
         # An entity primarily responsible for creating the learning opportunity.
-        data['metadata'].append(self.genCompassDict('dc.creator', item['coordinator'], lang))
+        data['metadata'].append(self.genCompassDict('dc.creator', item['coordinator'], language))
 
         ### OPTIONAL FIELDS --------------------------- ###
         # COMPETENCE
         # A prerequisite competence for accessing learning opportunities.
-        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.competence', item['prerequisite'], lang))
+        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.competence', item['prerequisite'], language))
 
         # TYPE
         # The nature or genre of the learning opportunity.
         # Not the same type as UC3M, those are not considered in COMPASS (Compulsive, basic core...)
         # It's hardwired to Talk/Lecture + Class/Group based, as all courses in the UC3M are (Bolonia)
-        data['metadata'].append(self.genCompassDict('dc.type', 'Talk/Lecture', lang))
-        data['metadata'].append(self.genCompassDict('dc.type', 'Class/Group based', lang))
+        data['metadata'].append(self.genCompassDict('dc.type', 'Talk/Lecture', language))
+        data['metadata'].append(self.genCompassDict('dc.type', 'Class/Group based', language))
 
         # LEVEL
         # An account of the education level of the learning opportunity.
         # The bachelor information contains the kind of degree
         if ( 'bachelor' in item['bachelor'].lower()):
-            data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', 'Level::ISCE::Bachelor’s or equivalent level ', lang))
+            data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', 'Level::ISCE::Bachelor’s or equivalent level ', language))
         elif ( 'master' in item['bachelor'].lower()):
-            data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', 'Level::ISCE::Master’s or equivalent level ', lang))
+            data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', 'Level::ISCE::Master’s or equivalent level ', language))
 
         # URL
         # A hyperlink to a web resource that provides an alternate representation of the learning opportunity.
-        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.url', item['url'], lang))
+        data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.url', item['url'], language))
 
         # LANGUAGE
         # A language of the learning opportunity.
         # Hard wired to English
-        data['metadata'].append(self.genCompassDict('dc.language.iso', lang, lang))
+        data['metadata'].append(self.genCompassDict('dc.language.iso', language, language))
 
 
         # SUBJECT
@@ -122,26 +122,55 @@ class CourseToJSONC(object):
         # data['metadata'].append(self.genCompassDict('dc.subject', item['name'], 'en_US'))
 
 
-
-
         # data['metadata'].append(self.genCompassDict('dc.rights', item., 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.date', item['semester'], 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.publisher', 'UC3M', 'en_US'))
+        data['metadata'].append(self.genCompassDict('dc.date', item['semester'], language))
+        data['metadata'].append(self.genCompassDict('dc.publisher', 'UC3M', language))
         # data.append(self.genCompassDict('dc.relation', item., 'en_US'))
-        data['metadata'].append(self.genCompassDict('dc.creator', item['bachelor'], 'en_US'))
+        data['metadata'].append(self.genCompassDict('dc.creator', item['bachelor'], language))
         data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.credit', item['credits'], 'en_US'))
+            self.genCompassDict('compass.learningOpportunitySpecification.credit', item['credits'], language))
         data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.qualification', item['qualification'], 'en_US'))
+            self.genCompassDict('compass.learningOpportunitySpecification.qualification', item['qualification'], language))
         data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.prerequisite', item['prerequisite'], 'en_US'))
+            self.genCompassDict('compass.learningOpportunitySpecification.prerequisite', item['prerequisite'], language))
         data['metadata'].append(
-            self.genCompassDict('compass.learningOpportunitySpecification.objective', item['programme'], 'en_US'))
+            self.genCompassDict('compass.learningOpportunitySpecification.objective', item['programme'], language))
         # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.level', item., 'en_US'))
         # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.assessment', item., 'en_US'))
         # data['metadata'].append(self.genCompassDict('compass.learningOpportunitySpecification.hasPart', item., 'en_US'))
 
         return data
+
+    #def  description
+
+    '''
+    Generates a ID:
+    university-courseID-degreeType_degreeAcronym
+    Ex. for UC3M 205 Bachelor in Computer Science : UC3M-205-b_CS
+    '''
+    def idGenerate(self, university, courseID, degree):
+        tempDegree = degree.lower()
+        degreeType = ''
+        if ('master' in tempDegree):
+            # It's a master
+            degreeType = 'm'
+            tempDegree = tempDegree.replace('master in ', '')
+        elif ('bachelor' in tempDegree):
+            # It's a bachelor
+            degreeType = 'b'
+            tempDegree = tempDegree.replace('bachelor in ', '')
+
+        # Now in tempDegree is just the name
+        # Acronym generation
+        degreeWords = tempDegree.split()
+        degreeAcronym = ''
+        for word in degreeWords:
+            degreeAcronym += word[0]
+
+        id = ''
+        id = university + '-' + str(courseID) + '-' + degreeType + '_' + degreeAcronym
+
+        return id
 
     def saveJSON(self, data, fileName):
         try:

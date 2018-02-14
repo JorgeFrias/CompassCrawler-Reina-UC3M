@@ -68,8 +68,8 @@ class CourseToJSONC(object):
         data['metadata'].append(self.genCompassDict('dc.title', item['name'], language))
 
         # DESCRIPTION
-        # $$$$ Not defined at UC3M
-        # data['metadata'].append(self.genCompassDict('dc.description', item['qualification'], 'en_US'))
+        # Not defined at UC3M, generate from qualification
+        data['metadata'].append(self.genCompassDict('dc.description', self.descriptionGenerate(item['qualification']), language))
 
         # IDENTIFIER
         # An alternative unambiguous reference to the learning opportunity within a given context.
@@ -141,8 +141,13 @@ class CourseToJSONC(object):
 
         return data
 
-    #def  description
+    def  descriptionGenerate(self, potentialDescription):
+        listIndicators = ['1', '-', '0', ]
+        if (potentialDescription[0] in listIndicators):
+            # It's a list (probably)
+            potentialDescription = 'This course covers the following topics: \n' + potentialDescription
 
+        return potentialDescription
     '''
     Generates a ID:
     university-courseID-degreeType_degreeAcronym

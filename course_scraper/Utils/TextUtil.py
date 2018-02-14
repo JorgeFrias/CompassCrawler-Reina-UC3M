@@ -15,14 +15,17 @@ def cleanNewLines(stringToClean):
     return  stringToClean
 
 """
-Cleans all last new lines
+Cleans all last/first new lines
 """
 def cleanLastNewLine(stringToClean):
     if (stringToClean[-1] == '\n'):
         stringToClean = stringToClean[:-1]
-        return cleanLastNewLine(stringToClean)        # Recursive call
+        return cleanLastNewLine(stringToClean)          # Recursive call
+    elif (stringToClean[0] == '\n'):
+        stringToClean = stringToClean[1:]
+        return cleanLastNewLine(stringToClean)          # Recursive call
     else:
-        return  stringToClean
+        return  stringToClean                           # Base
 
 """
 Cleans all tabs in the text

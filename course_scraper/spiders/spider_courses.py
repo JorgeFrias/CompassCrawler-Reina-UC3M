@@ -86,7 +86,7 @@ class SpiderCoursesSpider(CrawlSpider):
         programme = response.xpath(furtherInfo_selector).extract()[2]
         # Assessment is divided, so we have to put it together
         assessment = response.xpath(furtherInfo_selector).extract()[4]
-        assessmentExt = 'Last chance evaluation: \n' + \
+        assessmentExt = 'Calculation of final grade: \n' + \
                         response.xpath(assessmentExt_selector).extract()[0] + '\n' + \
                         response.xpath(assessmentExt_selector).extract()[1]
 

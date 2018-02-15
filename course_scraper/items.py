@@ -30,3 +30,4 @@ class CourseScraperItem(scrapy.Item):
     qualification = scrapy.Field()
     programme = scrapy.Field()
     assessment = scrapy.Field()
+    date = scrapy.Field()

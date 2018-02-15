@@ -10,7 +10,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from course_scraper.items import CourseScraperItem
 from course_scraper.Utils import TextUtil
-
+import datetime
 
 # GLOBAL CONSTANTS
 noInfoString = 'NA'         # Used to populate information less fields
@@ -90,6 +90,8 @@ class SpiderCoursesSpider(CrawlSpider):
                         response.xpath(assessmentExt_selector).extract()[0] + '\n' + \
                         response.xpath(assessmentExt_selector).extract()[1]
 
+        # date = datetime.datetime.now().isoformat('%Y-%m-%d %H:%M')
+
         ### VALUES CLEANING ###
         # Numbers cleaning
         tmpYearList = TextUtil.extractNumericValue(year)
@@ -115,6 +117,13 @@ class SpiderCoursesSpider(CrawlSpider):
         # Clean \n & \t
         name = TextUtil.cleanProcedure_SingleLineText(name)
         bachelor = TextUtil.cleanProcedure_SingleLineText(bachelor)
+        if (bachelor[-1] is ')'):
+            # Usually they are defined like Bachelor Name (id), this removes the (id)
+            while (bachelor[-1] is not '('):
+                bachelor = bachelor[:-1]                                 # Removes until '('
+            bachelor = bachelor[:-1]                                     # Removes '('
+        bachelor = TextUtil.cleanProcedure_SingleLineText(bachelor)     # Call again to ensure (last withespace)
+
         coordinator = TextUtil.cleanProcedure_SingleLineText(coordinator)
         departament = TextUtil.cleanProcedure_SingleLineText(departament)
         type = TextUtil.cleanProcedure_SingleLineText(type)
@@ -177,5 +186,6 @@ class SpiderCoursesSpider(CrawlSpider):
         courseObj['qualification'] = qualification
         courseObj['programme'] = programme
         courseObj['assessment'] = assessment
+        # courseObj['date'] = date
 
         yield courseObj

@@ -84,4 +84,5 @@ Cleans:
 def cleanProcedure_SingleLineText(stringToClean):
     stringToClean = cleanTabs(stringToClean)
     stringToClean = cleanNewLines(stringToClean)
+    stringToClean = stringToClean.rstrip(' ')
     return stringToClean

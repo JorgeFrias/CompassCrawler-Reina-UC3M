@@ -49,7 +49,7 @@ Stored at: C:\Users\CURRENT_USER\...\course_scraper\Courses
 All information will be exported in COMPASS JSON format to the default output folder `course_scraper\Courses`, with one JSON for each extracted course.
 
 ## File format
-### File name
+### File name   
 The generated file names are the name of the bachelor or master under-slash UC3M course id with JSON extension.
 ### Fields
 The fields from the UC3M system often needs translation, in order to be compatible with COMPASS. As shown below you can check the conversions.
@@ -79,13 +79,7 @@ To make easier yor life you should [learn a bit of Scrapy](https://doc.scrapy.or
 Scrapy is a popular crawling library allowing easy web information extraction, this is possible just customizing a couple of files `items.py, pipelines.py` and the spiders beneath `spiders` folder in this case `spider_courses.py`.  
 
 * `items.py` defines the items fields, an item is a information instance extracted from a page, in our case represents a course an its information.
-* `spider_courses` defines the spider which is going to fetch the information from a given page. It has to locate the information in the HTML structure of the page and store the information into a scrapy item instance. In this case the spider also format (lightly) some of the values. The locating of the information is archieved using [XPath](https://en.wikipedia.org/wiki/XPath) in code defined by selectors.
+* `spider_courses` defines the spider which is going to fetch the information from a given page. It has to locate the information in the HTML structure of the page and store the information into a scrapy item instance. The locating of the information is archieved using [XPath](https://en.wikipedia.org/wiki/XPath) in code defined by selectors. In this case the spider also format (lightly) some of the values because XPath is not precise enough for the current page structure.
 * `pipelines.py` defines the processing over the extracted items, in this case it generates the COMPASS JSON using `Utils.CourseToJSON` a custom utility intended to translate the UC3M information to COMPASS model and store it in JSON files to later be added to COMPASS service. The supported fields are collected in the table above beneath the section files. All the conversions are explained in code.
-
-## Project Dependencies
-Package          | Version
------------------|----------
-Python           | 3.6
-Scrapy           | 1.5.0
 
 ## License

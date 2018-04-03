@@ -23,11 +23,11 @@ Technically is a web crawler with conversion to COMPASS JSON.
 <!-- /TOC -->
 
 ## Installation
-This project can be launch without install, you just need [Python(3.6)](https://www.python.org) and [Scrapy (1.5).](https://doc.scrapy.org/en/latest/intro/install.html) With both installed yoy are ready to rock.
+This project can be launch without install, you just need [Python(3.6)](https://www.python.org) and [Scrapy (1.5).](https://doc.scrapy.org/en/latest/intro/install.html) With both installed you are ready to rock.
 
 ## Usage
 Go to `CompassCrawler\course_scraper` and run the python script main.py (`python main.py`).
-You'll be asked to insert the UC3M bachelors home pages, to extract the information from their courses as shown below. Once you finish, insert a double enter and the program will start.  
+You'll be asked to insert the UC3M bachelors home pages _(note is the bachelor page, not the course page)_, to extract the information from their courses as shown below. Once you finish, insert a double enter and the program will start.  
 ~~~~
 $ python main.py
 Welcome to COMPASS UC3M courses parser.

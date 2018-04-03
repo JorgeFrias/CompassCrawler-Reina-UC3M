@@ -9,10 +9,11 @@ import sys
 import os
 import subprocess
 
-if (sys.argv[1] is 'd'):
-    page = 'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212562160/1371212987094/Bachelor_s_Degree_in_Computer_Science_and_Engineering#curriculum'
-    command = ('scrapy crawl --nolog spider_courses -a start_url=' + page)
-    cmdline.execute(command.split())
+if (len(sys.argv) > 1):
+    if (sys.argv[1] is 'd'):
+        page = 'https://www.uc3m.es/ss/Satellite/Grado/en/Detalle/Estudio_C/1371212562160/1371212987094/Bachelor_s_Degree_in_Computer_Science_and_Engineering#curriculum'
+        command = ('scrapy crawl --nolog spider_courses -a start_url=' + page)
+        cmdline.execute(command.split())
 else:
     print('Welcome to COMPASS UC3M courses parser.\n'
           'This tool helps you to extract the information from the UC3M website '

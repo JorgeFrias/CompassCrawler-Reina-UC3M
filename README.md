@@ -1,4 +1,7 @@
 # CompassCrawler-Reina-UC3M
+![python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)
+![scrapy 1.5](https://img.shields.io/badge/scrapy-1.5-blue.svg)
+
 ## Description
 This project is under a bigger one the [COMPASS project](http://www.learning-compass.eu), aimed to represent learning opportunities with integrated learning outcomes/competence information. For universities around the world.  
 

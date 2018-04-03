@@ -20,7 +20,6 @@ Technically is a web crawler with conversion to COMPASS JSON.
 		- [Fields](#fields)
 	- [Contributing](#contributing)
 		- [Project structure](#project-structure)
-	- [Project Dependencies](#project-dependencies)
 	- [License](#license)
 
 <!-- /TOC -->
